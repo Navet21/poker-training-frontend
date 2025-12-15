@@ -1,4 +1,4 @@
-import { Board, BoardTexture, Street } from '../types';
+import type { Board, BoardTexture, Street } from '../types';
 
 export interface StreetTextureInfo {
   street: Street;

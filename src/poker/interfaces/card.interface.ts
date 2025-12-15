@@ -1,4 +1,4 @@
-import { Rank, Suit } from '../types/';
+import type { Rank, Suit } from '../types/';
 
 export interface Card {
   rank: Rank;

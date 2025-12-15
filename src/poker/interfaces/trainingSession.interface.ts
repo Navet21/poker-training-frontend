@@ -1,4 +1,4 @@
-import { Board, Street } from '../types';
+import type { Board, Street } from '../types';
 
 export interface TrainingSession {
   id: string;

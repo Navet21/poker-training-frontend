@@ -1,4 +1,4 @@
-import { Street, Board } from '../types';
+import type { Street, Board } from '../types';
 
 export interface TrainingSessionInitResponse {
   sessionId: string;
