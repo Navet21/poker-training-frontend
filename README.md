@@ -1,73 +1,62 @@
-# React + TypeScript + Vite
+# 🃏 Poker Training App – Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Aplicación de entrenamiento de poker centrada en **lectura de boards** y **cálculo de outs ajustadas**, diseñada para estudiar spots reales de forma progresiva (flop → turn → river).
 
-Currently, two official plugins are available:
+Este frontend consume una API propia y está pensado como herramienta de **aprendizaje**, no como solver automático.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## 🚀 Tecnologías
 
-The React Compiler is currently not compatible with SWC. See [this issue](https://github.com/vitejs/vite-plugin-react/issues/428) for tracking the progress.
+- ⚛️ React + TypeScript
+- ⚡ Vite
+- 🎨 CSS modular por componente
+- 🌐 API REST (backend propio en NestJS)
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 🧠 Modos de entrenamiento
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### 🟢 1. Texture Trainer
+Entrena la **lectura de textura del board**.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+**Flujo:**
+1. Se genera una sesión
+2. Se muestra el board por streets (flop → turn → river)
+3. El usuario clasifica la textura:
+   - Seca
+   - Semi-coordinada
+   - Coordinada
+   - Súper coordinada
+4. El sistema valida y explica la respuesta
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+Este modo ayuda a:
+- Mejorar lectura rápida de mesas
+- Entender cómo cambia la textura street a street
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### 🔵 2. Outs Trainer
+Entrena el **cálculo de outs ajustadas según la mesa**.
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+**Flujo:**
+1. Se genera una mano con:
+   - Hole cards
+   - Board
+2. El usuario introduce el número de outs
+3. El sistema responde con:
+   - Si es correcta o no
+   - Outs reales
+   - Breakdown por componentes
+   - Explicación **en lenguaje humano**, basada en reglas de estudio
+
+**Ejemplos de componentes:**
+- Overcards
+- Proyecto de color
+- Proyecto de escalera
+
+Las outs se ajustan según:
+- Textura
+- Mesa emparejada
+- Coordinación
+- Fuerza relativa del proyecto

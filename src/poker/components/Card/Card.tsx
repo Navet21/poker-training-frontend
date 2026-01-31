@@ -1,4 +1,5 @@
-import type { Card } from "../interfaces";
+import type { Card } from "../../interfaces";
+
 
 const SUIT_SYMBOL: Record<Card["suit"], string> = {
   S: "♠",

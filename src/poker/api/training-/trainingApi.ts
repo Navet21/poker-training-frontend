@@ -1,5 +1,3 @@
-// src/api/trainingApi.ts
-
 import type { TrainingSessionInitResponse, TrainingAnswerResponse, TrainingSessionSummaryResponse } from "../../interfaces";
 import type { Street, BoardTexture } from "../../types";
 
