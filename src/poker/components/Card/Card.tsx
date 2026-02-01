@@ -1,4 +1,4 @@
-import type { Card as CardType } from "../../interfaces";
+import type { Card as CardType } from "../../types";
 import { useCardSkin } from "../../theme/useCardSkin";
 
 import "./Card.css";

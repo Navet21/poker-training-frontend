@@ -1,0 +1,27 @@
+.skin-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: transparent;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.skin-toggle:hover {
+  border-color: rgba(255,255,255,0.22);
+}
+
+.skin-toggle__label {
+  opacity: 0.75;
+  font-weight: 600;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.skin-toggle__value {
+  font-size: 13px;
+}

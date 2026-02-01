@@ -1,3 +1,4 @@
-import type { Card } from '../interfaces';
+import type { Card } from "./card.type";
+
 
 export type Board = Card[];

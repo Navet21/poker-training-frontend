@@ -1,5 +1,15 @@
-import type { TrainingSessionInitResponse, TrainingAnswerResponse, TrainingSessionSummaryResponse } from "../../interfaces";
 import type { Street, BoardTexture } from "../../types";
+
+import type {
+  TrainingSessionInitDto,
+  TrainingAnswerDto,
+} from "../contracts/texture.dto";
+import type { TextureSession, TextureAnswer } from "../../domain/texture/texture.types";
+import {
+  mapTextureSessionInitDtoToDomain,
+  mapTextureAnswerDtoToDomain,
+} from "../mappers/texture.mapper";
+import type { TrainingSessionSummaryDto } from "../contracts/texture.dto";
 
 
 export interface AnswerPayload {
@@ -21,21 +31,19 @@ async function handleResponse<T>(res: Response): Promise<T> {
   return res.json() as Promise<T>;
 }
 
-export async function createTrainingSession(): Promise<TrainingSessionInitResponse> {
+export async function createTrainingSession(): Promise<TextureSession> {
   const res = await fetch(`${API_URL}/training/session`, {
     method: "POST",
   });
-  const data = await handleResponse<TrainingSessionInitResponse>(res);
-  console.log("[createTrainingSession] response:", data);
-  return data;
+
+  const dto = await handleResponse<TrainingSessionInitDto>(res);
+  return mapTextureSessionInitDtoToDomain(dto);
 }
 
 export async function answerTrainingSession(
   sessionId: string,
   payload: AnswerPayload,
-): Promise<TrainingAnswerResponse> {
-  console.log("[answerTrainingSession] body:", payload);
-
+): Promise<TextureAnswer> {
   const res = await fetch(`${API_URL}/training/session/${sessionId}/answer`, {
     method: "POST",
     headers: {
@@ -44,16 +52,14 @@ export async function answerTrainingSession(
     body: JSON.stringify(payload),
   });
 
-  const data = await handleResponse<TrainingAnswerResponse>(res);
-  console.log("[answerTrainingSession] response:", data);
-  return data;
+  const dto = await handleResponse<TrainingAnswerDto>(res);
+  return mapTextureAnswerDtoToDomain(dto);
 }
 
 export async function getTrainingSessionSummary(
   sessionId: string,
-): Promise<TrainingSessionSummaryResponse> {
+): Promise<TrainingSessionSummaryDto> {
   const res = await fetch(`${API_URL}/training/session/${sessionId}`);
-  const data = await handleResponse<TrainingSessionSummaryResponse>(res);
-  console.log("[getTrainingSessionSummary] response:", data);
-  return data;
+  return handleResponse<TrainingSessionSummaryDto>(res);
 }
+

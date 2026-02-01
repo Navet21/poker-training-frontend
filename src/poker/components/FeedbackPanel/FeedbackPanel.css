@@ -1,0 +1,107 @@
+.fp {
+  margin-top: 16px;
+  padding: 14px;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 12px;
+}
+
+.fp__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.fp__title {
+  margin: 0;
+  font-size: 16px;
+}
+
+.fp__badge {
+  font-weight: 700;
+  font-size: 12px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.12);
+}
+
+.fp__badge--ok {
+  background: rgba(0, 255, 0, 0.08);
+}
+
+.fp__badge--ko {
+  background: rgba(255, 0, 0, 0.08);
+}
+
+.fp__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.fp__metric {
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.10);
+}
+
+.fp__label {
+  opacity: 0.75;
+  font-size: 12px;
+  margin-bottom: 4px;
+}
+
+.fp__value {
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.fp__box {
+  margin-top: 12px;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.10);
+}
+
+.fp__text {
+  margin: 0;
+  line-height: 1.35;
+}
+
+.fp__breakdown,
+.fp__takeaway {
+  margin-top: 12px;
+}
+
+.fp__subtitle {
+  margin: 0 0 8px;
+  font-size: 13px;
+  opacity: 0.85;
+}
+
+.fp__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 6px;
+}
+
+.fp__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.10);
+}
+
+.fp__itemLabel {
+  font-weight: 600;
+}
+
+.fp__itemValue {
+  opacity: 0.85;
+}

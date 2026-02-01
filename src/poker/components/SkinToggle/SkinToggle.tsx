@@ -1,11 +1,20 @@
 import { useState } from "react";
-import "./App.css";
 
-import { TextureTrainer } from "./poker/components/TextureTrainer/TextureTrainer";
-import { OutsTrainer } from "./poker/components/OutsTrainer/OutsTrainer";
-import { SkinToggle } from "./poker/components/SkinToggle/SkinToggle";
+import { useCardSkin } from "../../theme/useCardSkin";
+import { TextureTrainer } from "../TextureTrainer/TextureTrainer";
+import { OutsTrainer } from "../OutsTrainer/OutsTrainer";
+
 
 type Mode = "texture" | "outs";
+
+export function SkinToggle() {
+  const { skin, toggle } = useCardSkin();
+  return (
+    <button onClick={toggle}>
+      Skin: {skin === "flat" ? "Flat" : "Classic"}
+    </button>
+  );
+}
 
 function App() {
   const [mode, setMode] = useState<Mode>("texture");
@@ -22,6 +31,7 @@ function App() {
           Outs
         </button>
 
+        {/* 👇 Toggle al lado */}
         <SkinToggle />
       </div>
 

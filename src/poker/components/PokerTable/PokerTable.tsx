@@ -1,5 +1,4 @@
-import type { Board } from "../../types";
-import type { Card as CardType } from "../../interfaces";
+import type { Board, Card as CardType } from "../../types";
 import { Card as CardView } from "../Card/Card";
 import "./PokerTable.css";
 

@@ -3,16 +3,18 @@ import {
   createTrainingSession,
   answerTrainingSession,
   getTrainingSessionSummary,
-} from "../../api/training-/trainingApi";
-import type {
-  TrainingAnswerResponse,
-  TrainingSessionSummaryResponse,
-} from "../../interfaces";
-import type { BoardTexture, Street, Board } from "../../types";
+} from "../../api/training/trainingApi";
+
+import type { TextureSession, TextureAnswer } from "../../domain/texture/texture.types";
+import type { BoardTexture } from "../../types";
+
+
 import { Card } from "../Card/Card";
 import { PokerTable } from "../PokerTable/PokerTable";
-import "./TextureTrainer.css";
+import { FeedbackPanel } from '../FeedbackPanel/FeedbackPanel';
 
+import "./TextureTrainer.css";
+import type { TrainingSessionSummaryDto } from "../../api/contracts/texture.dto";
 
 const TEXTURE_LABELS: Record<BoardTexture, string> = {
   dry: "Seca",
@@ -22,13 +24,12 @@ const TEXTURE_LABELS: Record<BoardTexture, string> = {
 };
 
 export function TextureTrainer() {
-  const [sessionId, setSessionId] = useState<string | null>(null);
-  const [currentStreet, setCurrentStreet] = useState<Street | null>(null);
-  const [currentCards, setCurrentCards] = useState<Board>([]);
-  const [lastAnswer, setLastAnswer] = useState<TrainingAnswerResponse | null>(null);
-  const [summary, setSummary] = useState<TrainingSessionSummaryResponse | null>(null);
+  const [session, setSession] = useState<TextureSession | null>(null);
+  const [lastAnswer, setLastAnswer] = useState<TextureAnswer | null>(null);
+  const [summary, setSummary] = useState<TrainingSessionSummaryDto | null>(null);
+  const [lastPick, setLastPick] = useState<BoardTexture | null>(null);
   const [loading, setLoading] = useState(false);
-  const [, setAnswering] = useState(false);
+  const [answering, setAnswering] = useState(false);
   const [error, setError] = useState<string>("");
 
   async function handleNewSession() {
@@ -37,11 +38,9 @@ export function TextureTrainer() {
       setSummary(null);
       setLastAnswer(null);
       setLoading(true);
-
+      setLastPick(null);
       const data = await createTrainingSession();
-      setSessionId(data.sessionId);
-      setCurrentStreet(data.street);
-      setCurrentCards(data.cards);
+      setSession(data);
     } catch (err) {
       console.error(err);
       const message = err instanceof Error ? err.message : "Error al crear sesión";
@@ -52,29 +51,29 @@ export function TextureTrainer() {
   }
 
   async function handleTextureClick(texture: BoardTexture) {
-    if (!sessionId || !currentStreet) return;
-    console.log("[FRONT] sending answer", { sessionId, currentStreet, texture });
-
+    if (!session) return;
+    setLastPick(texture);
     try {
       setError("");
       setAnswering(true);
 
-      const answer = await answerTrainingSession(sessionId, {
-        street: currentStreet,
+      const answer = await answerTrainingSession(session.sessionId, {
+        street: session.street,
         texture,
       });
 
       setLastAnswer(answer);
 
       if (answer.finished) {
-        const summaryData = await getTrainingSessionSummary(sessionId).catch(() => null);
+        const summaryData = await getTrainingSessionSummary(session.sessionId).catch(() => null);
         if (summaryData) setSummary(summaryData);
-        setSessionId(null);
-      } else {
-        if (answer.nextStreet && answer.nextCards) {
-          setCurrentStreet(answer.nextStreet);
-          setCurrentCards(answer.nextCards);
-        }
+        setSession(null);
+      } else if (answer.next) {
+        setSession({
+          sessionId: session.sessionId,
+          street: answer.next.street,
+          board: answer.next.board,
+        });
       }
     } catch (err) {
       console.error(err);
@@ -86,63 +85,53 @@ export function TextureTrainer() {
   }
 
   const fullBoard =
-    summary?.streets.find((s) => s.street === "river")?.cards ?? currentCards;
+    summary?.streets.find((s) => s.street === "river")?.cards ?? session?.board ?? [];
 
   return (
     <div className="hand-container">
       <h2>Trainer: Textura</h2>
 
       <div className="controls">
-        <button onClick={handleNewSession} disabled={loading || !!sessionId}>
+        <button onClick={handleNewSession} disabled={loading || !!session}>
           {loading ? "Creando sesión..." : "Nueva sesión"}
         </button>
       </div>
 
       {error && <p className="error">{error}</p>}
 
-      {currentStreet && currentCards.length > 0 && (
+      {session && session.board.length > 0 && (
         <>
           <h3>
             Street actual:{" "}
-            <span style={{ textTransform: "capitalize" }}>{currentStreet}</span>
+            <span style={{ textTransform: "capitalize" }}>{session.street}</span>
           </h3>
 
-          <PokerTable boardCards={currentCards} />
-
+          <PokerTable boardCards={session.board} />
 
           <p>¿Cómo describirías la textura de este board?</p>
 
           <div className="texture-buttons">
             {(Object.keys(TEXTURE_LABELS) as BoardTexture[]).map((tex) => (
-              <button key={tex} onClick={() => handleTextureClick(tex)}>
+              <button
+                key={tex}
+                onClick={() => handleTextureClick(tex)}
+                disabled={answering}
+              >
                 {TEXTURE_LABELS[tex]}
               </button>
             ))}
           </div>
 
           {lastAnswer && (
-            <div className="answer-result">
-              <p>
-                Tu respuesta fue:{" "}
-                <strong>
-                  {lastAnswer.correct ? "CORRECTA ✅" : "INCORRECTA ❌"}
-                </strong>
-              </p>
-
-              {!lastAnswer.correct && (
-                <div>
-                    {lastAnswer.helpText && <p className="help-text">{lastAnswer.helpText}</p>}
-                    <p>
-                    Textura correcta: <strong>{TEXTURE_LABELS[lastAnswer.correctTexture]}</strong>
-                    </p>
-                </div>
-                )}
-
-
-              {lastAnswer.finished && (
-                <p>La sesión ha terminado. Puedes ver el resumen abajo.</p>
-              )}
-            </div>
+            <FeedbackPanel
+              verdict={lastAnswer.verdict}
+              primary={{ label: "Tu respuesta", value: lastPick ? TEXTURE_LABELS[lastPick] : "—", }}
+              secondary={{
+                label: "Correcta",
+                value: TEXTURE_LABELS[lastAnswer.correctTexture],
+              }}
+              explanation={lastAnswer.helpText}
+            />
           )}
         </>
       )}
@@ -156,7 +145,7 @@ export function TextureTrainer() {
             <div className="poker-table">
               <div className="community-row">
                 {fullBoard.map((card, idx) => (
-                  <Card key={idx} card={card} />
+                  <Card key={`${card.rank}${card.suit}-${idx}`} card={card} />
                 ))}
               </div>
             </div>
@@ -168,7 +157,7 @@ export function TextureTrainer() {
                 <h4 style={{ textTransform: "capitalize" }}>{s.street}</h4>
                 <div className="board-cards">
                   {s.cards.map((card, idx) => (
-                    <Card key={idx} card={card} />
+                    <Card key={`${card.rank}${card.suit}-${idx}`} card={card} />
                   ))}
                 </div>
                 <p>
@@ -180,7 +169,7 @@ export function TextureTrainer() {
         </div>
       )}
 
-      {!currentStreet && !summary && !loading && (
+      {!session && !summary && !loading && (
         <p>Pulsa &quot;Nueva sesión&quot; para empezar a entrenar.</p>
       )}
     </div>
