@@ -1,50 +1,45 @@
-import type { Card } from "../../interfaces";
+import type { Card as CardType } from "../../interfaces";
+import { useCardSkin } from "../../theme/useCardSkin";
 
+import "./Card.css";
+import "../../theme/skins/flat.css";
+import "../../theme/skins/classic.css";
 
-const SUIT_SYMBOL: Record<Card["suit"], string> = {
+const SUIT_SYMBOL: Record<CardType["suit"], string> = {
   S: "♠",
   H: "♥",
   D: "♦",
   C: "♣",
 };
 
-// Colores de fondo por palo
-const SUIT_COLORS: Record<Card["suit"], string> = {
-  H: "#e11d48", // corazones - rojo
-  C: "#16a34a", // tréboles - verde
-  S: "#020617", // picas - casi negro
-  D: "#2563eb", // diamantes - azul
+const SUIT_CLASS: Record<CardType["suit"], string> = {
+  S: "suit-spades",
+  H: "suit-hearts",
+  D: "suit-diamonds",
+  C: "suit-clubs",
 };
 
-export function Card({ card }: { card: Card }) {
-  const bg = SUIT_COLORS[card.suit];
+export function Card({ card }: { card: CardType }) {
+  const { skin } = useCardSkin();
   const symbol = SUIT_SYMBOL[card.suit];
 
   return (
-    <div
-      style={{
-        width: "3.3rem",
-        height: "4.6rem",
-        borderRadius: "0.6rem",
-        border: "2px solid rgba(15,23,42,0.9)",
-        padding: "0.3rem",
-        background: bg,
-        boxShadow: "0 8px 18px rgba(0,0,0,0.6)",
-        color: "#ffffff", // número y palo blancos
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "space-between",
-        fontWeight: 700,
-        fontSize: "1rem",
-      }}
-    >
-      <div style={{ alignSelf: "flex-start", lineHeight: 1 }}>
-        {card.rank}
+    <div className={`card card--${skin} ${SUIT_CLASS[card.suit]}`}>
+      {/* Esquina superior izquierda */}
+      <div className="card__corner card__corner--tl">
+        <div className="card__rank">{card.rank}</div>
+        <div className="card__suit">{symbol}</div>
       </div>
-      <div style={{ fontSize: "1.2rem", lineHeight: 1 }}>{symbol}</div>
-      <div style={{ alignSelf: "flex-end", transform: "rotate(180deg)", lineHeight: 1 }}>
-        {card.rank}
+
+      {/* Centro */}
+      <div className="card__center">
+        <div className="card__suit card__suit--big">{symbol}</div>
+      </div>
+
+      {/* Esquina inferior derecha (rotada) */}
+      <div className="card__corner card__corner--br">
+        <div className="card__rank">{card.rank}</div>
+        <div className="card__suit">{symbol}</div>
       </div>
     </div>
   );

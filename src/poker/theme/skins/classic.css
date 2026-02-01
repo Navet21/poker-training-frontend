@@ -1,0 +1,24 @@
+.card--classic {
+  background: linear-gradient(#ffffff, #f3f4f6);
+  border: 2px solid rgba(0,0,0,0.25);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.55);
+  color: #0b1220;
+}
+
+.card--classic.suit-hearts,
+.card--classic.suit-diamonds {
+  color: #dc2626;
+}
+
+.card--classic.suit-clubs,
+.card--classic.suit-spades {
+  color: #0b1220;
+}
+
+.card--classic .card__center {
+  transform: translateY(2px);
+}
+
+.card--classic .card__suit--big {
+  filter: drop-shadow(0 1px 0 rgba(0,0,0,0.15));
+}
