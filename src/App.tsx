@@ -1,31 +1,31 @@
 import { useState } from "react";
 import "./App.css";
-
+import { Home } from "./poker/components/Home/Home";
 import { TextureTrainer } from "./poker/components/TextureTrainer/TextureTrainer";
 import { OutsTrainer } from "./poker/components/OutsTrainer/OutsTrainer";
-import { SkinToggle } from "./poker/components/SkinToggle/SkinToggle";
+import { Footer } from "./poker/components/Footer/Footer";
+import { TrainerLayout } from "./poker/components/TrainerLayout/TrainerLayout";
 
-type Mode = "texture" | "outs";
+type Mode = "home" | "texture" | "outs";
 
 function App() {
-  const [mode, setMode] = useState<Mode>("texture");
+  const [mode, setMode] = useState<Mode>("home");
 
   return (
     <div className="app">
-      <h1>Poker Trainer</h1>
+      {mode === "home" && <Home onSelect={setMode} />}
+      {mode === "texture" && (
+        <TrainerLayout title="Textura del board" onBack={() => setMode("home")}>
+          <TextureTrainer />
+        </TrainerLayout>
+      )}
 
-      <div className="controls">
-        <button onClick={() => setMode("texture")} disabled={mode === "texture"}>
-          Textura
-        </button>
-        <button onClick={() => setMode("outs")} disabled={mode === "outs"}>
-          Outs
-        </button>
-
-        <SkinToggle />
-      </div>
-
-      {mode === "texture" ? <TextureTrainer /> : <OutsTrainer />}
+      {mode === "outs" && (
+        <TrainerLayout title="Cálculo de outs" onBack={() => setMode("home")}>
+          <OutsTrainer />
+        </TrainerLayout>
+      )}
+      <Footer />
     </div>
   );
 }

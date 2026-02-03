@@ -3,20 +3,32 @@
   align-items: center;
   gap: 8px;
   padding: 8px 10px;
-  border-radius: 10px;
+  border-radius: 999px;
   border: 1px solid rgba(255,255,255,0.12);
-  background: transparent;
+  background: rgba(2, 6, 23, 0.35);
   cursor: pointer;
-  font-weight: 700;
+  font-weight: 800;
+  color: #e5e7eb;
+  backdrop-filter: blur(8px);
 }
 
 .skin-toggle:hover {
   border-color: rgba(255,255,255,0.22);
+  background: rgba(2, 6, 23, 0.5);
+}
+
+.skin-toggle:active {
+  transform: translateY(1px);
+}
+
+.skin-toggle__icon {
+  font-size: 16px;
+  line-height: 1;
 }
 
 .skin-toggle__label {
   opacity: 0.75;
-  font-weight: 600;
+  font-weight: 700;
   font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 0.04em;
@@ -24,4 +36,14 @@
 
 .skin-toggle__value {
   font-size: 13px;
+}
+
+.skin-toggle--icon {
+  padding: 8px 10px;
+  gap: 0;
+}
+
+.skin-toggle--icon .skin-toggle__label,
+.skin-toggle--icon .skin-toggle__value {
+  display: none;
 }

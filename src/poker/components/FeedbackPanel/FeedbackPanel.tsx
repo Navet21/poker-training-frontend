@@ -7,7 +7,7 @@ type BreakdownItem = {
 
 type Props = {
   title?: string; 
-  verdict: "correct" | "incorrect";
+  verdict: "correct" | "incorrect" | null;
   primary: { label: string; value: string | number };
   secondary: { label: string; value: string | number };
   explanation?: string;

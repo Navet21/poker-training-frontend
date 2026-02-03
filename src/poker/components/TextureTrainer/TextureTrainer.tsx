@@ -91,11 +91,16 @@ export function TextureTrainer() {
     <div className="hand-container">
       <h2>Trainer: Textura</h2>
 
-      <div className="controls">
-        <button onClick={handleNewSession} disabled={loading || !!session}>
-          {loading ? "Creando sesión..." : "Nueva sesión"}
-        </button>
-      </div>
+      <button
+        type="button"
+        className="btn btn-primary"
+        onClick={handleNewSession}
+        disabled={loading || !!session}
+      >
+        {loading ? "Creando sesión..." : "Nueva sesión"}
+      </button>
+
+
 
       {error && <p className="error">{error}</p>}
 
@@ -106,7 +111,9 @@ export function TextureTrainer() {
             <span style={{ textTransform: "capitalize" }}>{session.street}</span>
           </h3>
 
-          <PokerTable boardCards={session.board} />
+          <div className="table-zone">
+            <PokerTable boardCards={session.board}  />
+          </div>
 
           <p>¿Cómo describirías la textura de este board?</p>
 

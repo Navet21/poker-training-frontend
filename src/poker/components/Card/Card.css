@@ -1,12 +1,9 @@
 .card {
-  width: 3.3rem;
-  height: 4.6rem;
-  border-radius: 0.6rem;
-  position: relative;
-  display: grid;
-  place-items: center;
-  user-select: none;
+  width: clamp(44px, 6vw, 72px);
+  height: clamp(62px, 8.4vw, 104px);
+  border-radius: clamp(8px, 1vw, 12px);
 }
+
 
 .card__center {
   display: grid;
@@ -35,13 +32,14 @@
 }
 
 .card__rank {
-  font-size: 0.95rem;
+  font-size: clamp(12px, 1.6vw, 16px);
 }
 
 .card__suit {
-  font-size: 0.85rem;
+  font-size: clamp(12px, 1.6vw, 16px);
 }
 
 .card__suit--big {
-  font-size: 1.35rem;
+  font-size: clamp(20px, 3vw, 34px);
 }
+

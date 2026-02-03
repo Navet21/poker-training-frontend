@@ -1,0 +1,49 @@
+.app-header {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+@media (min-width: 640px) {
+  .app-header {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.app-title {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.app-controls {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+/* Tabs */
+.tab {
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: #020617;
+  border: 1px solid #1e293b;
+  color: #e5e7eb;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.tab:hover {
+  border-color: rgba(255, 255, 255, 0.22);
+}
+
+.tab--active {
+  background: #22c55e;
+  color: #052e16;
+  border-color: #22c55e;
+}

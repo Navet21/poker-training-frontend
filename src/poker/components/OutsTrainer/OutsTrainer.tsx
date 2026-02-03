@@ -20,7 +20,6 @@ export function OutsTrainer() {
   const [outsInput, setOutsInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [showDebug, setShowDebug] = useState(false);
 
 
   async function handleNewSession() {
@@ -55,14 +54,6 @@ export function OutsTrainer() {
     return;
   }
 
-  // ✅ LOG 1: estado actual antes de enviar
-  console.log("[OUTS][SUBMIT] current session", {
-    sessionId: session.sessionId,
-    street: session.street,
-    board: session.cards?.map((c) => `${c.rank}${c.suit}`).join(" "),
-    hole: session.hole?.map((c) => `${c.rank}${c.suit}`).join(" "),
-    userOuts: outs,
-  });
 
   try {
     setError("");
@@ -70,28 +61,12 @@ export function OutsTrainer() {
 
     // ✅ LOG 2: payload exacto que sale al backend
     const payload = { street: session.street, outs };
-    console.log("[OUTS][SUBMIT] payload -> backend", payload);
 
     const res = await answerOutsTrainingSession(session.sessionId, payload);
 
-    // ✅ LOG 3: respuesta (DOMINIO) que llega al front
-    console.log("[OUTS][ANSWER] response (domain)", {
-      verdict: res.verdict,
-      street: res.street,
-      userOuts: res.userOuts,
-      correctOuts: res.correctOuts,
-      finished: res.finished,
-      next: res.next,
-      flags: res.flags,
-      components: res.components,
-      explanation: res.explanation,
-    });
-
     setAnswer(res);
 
-    // ✅ LOG 4: avance de street
     if (!res.finished && res.next) {
-      console.log("[OUTS][ADVANCE] moving to next street", res.next);
 
       setSession({
         sessionId: session.sessionId,
@@ -102,7 +77,6 @@ export function OutsTrainer() {
 
       setOutsInput("");
     } else {
-      console.log("[OUTS][END] session finished, clearing session");
       setSession(null);
     }
   } catch (err) {
@@ -117,26 +91,49 @@ export function OutsTrainer() {
 
 
   return (
-    <div className="hand-container">
-      <h2>Outs Trainer</h2>
+  <div className="hand-container">
+    <h2>Outs Trainer</h2>
 
-      <div className="controls">
-        <button onClick={handleNewSession} disabled={loading || !!session}>
-          {loading ? "Creando sesión..." : "Nueva sesión"}
+    {error && <p className="error">{error}</p>}
+
+    {!session && (
+      <div className="actions">
+        <button
+          className="btn btn-primary btn-wide"
+          onClick={handleNewSession}
+          disabled={loading}
+          type="button"
+        >
+          {loading ? "Creando sesión..." : "Empezar sesión"}
         </button>
       </div>
+    )}
 
-      {error && <p className="error">{error}</p>}
-
-      {session && (
-        <>
-          <h3>
+    {session && (
+      <>
+        <div className="trainer-row">
+          <h3 className="street-title">
             Street actual:{" "}
-            <span style={{ textTransform: "capitalize" }}>{session.street}</span>
+            <span className="street-value">{session.street}</span>
           </h3>
 
-          <PokerTable boardCards={session.cards} holeCards={session.hole} />
+        </div>
 
+        <div className="table-zone table-zone--controls">
+          <button
+            className="btn table-action"
+            onClick={handleNewSession}
+            disabled={loading}
+            type="button"
+            title="Nueva mano"
+          >
+            ↻ Nueva mano
+          </button>
+
+          <PokerTable boardCards={session.cards} holeCards={session.hole} />
+        </div>
+
+        <div className="panel">
           <div className="outs-form">
             <label className="outs-label">
               Outs:
@@ -149,32 +146,28 @@ export function OutsTrainer() {
             </label>
 
             <button
-              className="outs-submit"
+              className="btn btn-primary"
               onClick={handleSubmit}
               disabled={loading}
+              type="button"
             >
               Responder
             </button>
           </div>
-        </>
-      )}
+        </div>
+      </>
+    )}
 
-      {answer && (
-        <FeedbackPanel
-          verdict={answer.verdict}
-          primary={{ label: "Tu outs", value: answer.userOuts }}
-          secondary={{ label: "Correctas", value: answer.correctOuts }}
-          explanation={answer.explanation}
-          breakdown={
-            showDebug
-              ? answer.components.map((c) => ({
-                  label: c.kind.replace("_", " "),
-                  value: `${c.outs} outs`,
-                }))
-              : undefined
-          }
-        />
-      )}
-    </div>
-  );
+    {answer && (
+      <FeedbackPanel
+        verdict={answer.verdict}
+        primary={{ label: "Tu outs", value: answer.userOuts }}
+        secondary={{ label: "Correctas", value: answer.correctOuts }}
+        explanation={answer.explanation}
+      />
+    )}
+
+  </div>
+);
+
 }
