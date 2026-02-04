@@ -1,12 +1,22 @@
-# 🃏 Poker Training App – Frontend
+# 🃏 Board Lab — Frontend
 
-Aplicación de entrenamiento de poker centrada en **lectura de boards** y **cálculo de outs ajustadas**, diseñada para estudiar spots reales de forma progresiva (flop → turn → river).
+**Board Lab** es una app de entrenamiento de poker para mejorar **lectura de boards** y **cálculo de outs**, con feedback **street a street** (flop → turn → river).
 
-Este frontend consume una API propia y está pensado como herramienta de **aprendizaje**, no como solver automático.
+No pretende ser un solver ni un calculador perfecto: está diseñada para aprender **patrones, razonamiento y errores comunes** con explicaciones claras y accionables.
 
 ---
 
-## 🚀 Tecnologías
+## ✨ Features actuales
+
+- ✅ Entrenamiento street a street (flop → turn → river)
+- ✅ Feedback inmediato con explicación
+- ✅ “Pedir carta” para avanzar a la siguiente street (sin avanzar automáticamente)
+- ✅ Botón **Nueva mano** en cualquier momento
+- ✅ UI responsive + modo de cartas (skin) configurable
+
+---
+
+## 🚀 Stack
 
 - ⚛️ React + TypeScript
 - ⚡ Vite
@@ -17,11 +27,13 @@ Este frontend consume una API propia y está pensado como herramienta de **apren
 
 ## 🧠 Modos de entrenamiento
 
-### 🟢 1. Texture Trainer
+### 🟢 Texture Trainer
+
 Entrena la **lectura de textura del board**.
 
-**Flujo:**
-1. Se genera una sesión
+**Flujo**
+
+1. Se inicia una mano
 2. Se muestra el board por streets (flop → turn → river)
 3. El usuario clasifica la textura:
    - Seca
@@ -29,34 +41,58 @@ Entrena la **lectura de textura del board**.
    - Coordinada
    - Súper coordinada
 4. El sistema valida y explica la respuesta
+5. El usuario decide cuándo avanzar con **Pedir carta**
 
-Este modo ayuda a:
-- Mejorar lectura rápida de mesas
+**Objetivo**
+
+- Lectura rápida de mesas
 - Entender cómo cambia la textura street a street
 
 ---
 
-### 🔵 2. Outs Trainer
+### 🔵 Outs Trainer
+
 Entrena el **cálculo de outs ajustadas según la mesa**.
 
-**Flujo:**
-1. Se genera una mano con:
-   - Hole cards
-   - Board
-2. El usuario introduce el número de outs
-3. El sistema responde con:
-   - Si es correcta o no
-   - Outs reales
-   - Breakdown por componentes
-   - Explicación **en lenguaje humano**, basada en reglas de estudio
+**Flujo**
 
-**Ejemplos de componentes:**
+1. Se genera una mano con hole cards + board
+2. El usuario introduce el número de outs
+3. El sistema devuelve:
+   - Veredicto (correcta / incorrecta)
+   - Outs correctas
+   - Explicación en lenguaje humano
+4. El usuario decide cuándo avanzar con **Pedir carta**
+5. Se puede reiniciar en cualquier momento con **Nueva mano**
+
+**Componentes (ejemplos)**
+
 - Overcards
 - Proyecto de color
 - Proyecto de escalera
 
-Las outs se ajustan según:
-- Textura
+**Ajustes**
+
+- Textura del board
 - Mesa emparejada
 - Coordinación
 - Fuerza relativa del proyecto
+
+---
+
+## 🧩 Próximas mejoras (roadmap)
+
+- 🔒 Hand Strength Trainer (próximamente)
+- 👤 Usuarios y sesiones guardadas (progreso / scores)
+- 📊 Estadísticas por tipo de spot
+- 🎨 Mejoras visuales (mesa, animaciones, skins extra)
+- 🧠 Equity aproximada (enfoque pedagógico, no solver)
+
+---
+
+## 🛠️ Cómo ejecutar
+
+```bash
+npm install
+npm run dev
+```

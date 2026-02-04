@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- borde exterior -->
+  <circle cx="32" cy="32" r="30" fill="#0b1220"/>
+  <circle cx="32" cy="32" r="28" fill="#111827"/>
+
+  <!-- marcas blancas tipo ficha -->
+  <g fill="#e5e7eb">
+    <rect x="30" y="2" width="4" height="10" rx="2"/>
+    <rect x="30" y="52" width="4" height="10" rx="2"/>
+    <rect x="2" y="30" width="10" height="4" rx="2"/>
+    <rect x="52" y="30" width="10" height="4" rx="2"/>
+
+    <rect x="10" y="10" width="8" height="4" rx="2" transform="rotate(45 14 12)"/>
+    <rect x="46" y="50" width="8" height="4" rx="2" transform="rotate(45 50 52)"/>
+    <rect x="46" y="10" width="8" height="4" rx="2" transform="rotate(135 50 12)"/>
+    <rect x="10" y="50" width="8" height="4" rx="2" transform="rotate(135 14 52)"/>
+  </g>
+
+  <!-- anillo interior -->
+  <circle cx="32" cy="32" r="18" fill="#020617" stroke="#22c55e" stroke-width="3"/>
+
+  <!-- texto BL -->
+  <text x="32" y="38"
+        text-anchor="middle"
+        font-size="16"
+        font-weight="800"
+        font-family="Inter, system-ui, sans-serif"
+        fill="#22c55e">
+    BL
+  </text>
+</svg>

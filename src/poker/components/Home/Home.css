@@ -62,3 +62,65 @@
   font-size: 14px;
   color: #94a3b8;
 }
+
+.home-card--disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  pointer-events: none;
+  position: relative;
+}
+
+.home-card--disabled .home-card-title,
+.home-card--disabled .home-card-desc {
+  color: #9ca3af;
+}
+
+.home-card-soon {
+  margin-top: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #94a3b8;
+}
+
+.home-about {
+  max-width: 820px;
+  margin: 48px auto 0;
+  padding-top: 28px;
+  border-top: 1px solid rgba(148, 163, 184, 0.15);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  color: #cbd5f5;
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+.home-about p {
+  margin: 0;
+}
+
+.home-about-list-title {
+  margin-top: 8px;
+  font-weight: 700;
+  color: #e5e7eb;
+}
+
+.home-about-list {
+  margin: 0;
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.home-about-list li {
+  color: #cbd5f5;
+}
+
+.home-about-note {
+  margin-top: 6px;
+  font-style: italic;
+  color: #94a3b8;
+}

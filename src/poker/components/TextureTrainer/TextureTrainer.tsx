@@ -8,7 +8,7 @@ import type { TextureSession, TextureAnswer } from "../../domain/texture/texture
 import type { BoardTexture } from "../../types";
 import { Card } from "../Card/Card";
 import { PokerTable } from "../PokerTable/PokerTable";
-import { FeedbackPanel } from '../FeedbackPanel/FeedbackPanel';
+import { FeedbackPanel } from "../FeedbackPanel/FeedbackPanel";
 import "./TextureTrainer.css";
 import type { TrainingSessionSummaryDto } from "../../api/contracts/texture.dto";
 const TEXTURE_LABELS: Record<BoardTexture, string> = {
@@ -26,19 +26,23 @@ export function TextureTrainer() {
   const [loading, setLoading] = useState(false);
   const [answering, setAnswering] = useState(false);
   const [error, setError] = useState<string>("");
+  const [pendingNext, setPendingNext] = useState<TextureSession | null>(null);
 
   async function handleNewSession() {
     try {
       setError("");
       setSummary(null);
       setLastAnswer(null);
-      setLoading(true);
       setLastPick(null);
+      setPendingNext(null);
+
+      setLoading(true);
       const data = await createTrainingSession();
       setSession(data);
     } catch (err) {
       console.error(err);
-      const message = err instanceof Error ? err.message : "Error al crear sesión";
+      const message =
+        err instanceof Error ? err.message : "Error al crear sesión";
       setError(message);
     } finally {
       setLoading(false);
@@ -47,7 +51,9 @@ export function TextureTrainer() {
 
   async function handleTextureClick(texture: BoardTexture) {
     if (!session) return;
+
     setLastPick(texture);
+
     try {
       setError("");
       setAnswering(true);
@@ -60,11 +66,16 @@ export function TextureTrainer() {
       setLastAnswer(answer);
 
       if (answer.finished) {
-        const summaryData = await getTrainingSessionSummary(session.sessionId).catch(() => null);
+        const summaryData = await getTrainingSessionSummary(session.sessionId).catch(
+          () => null
+        );
+
         if (summaryData) setSummary(summaryData);
+
         setSession(null);
+        setPendingNext(null);
       } else if (answer.next) {
-        setSession({
+        setPendingNext({
           sessionId: session.sessionId,
           street: answer.next.street,
           board: answer.next.board,
@@ -72,20 +83,37 @@ export function TextureTrainer() {
       }
     } catch (err) {
       console.error(err);
-      const message = err instanceof Error ? err.message : "Error al enviar la respuesta";
+      const message =
+        err instanceof Error ? err.message : "Error al enviar la respuesta";
       setError(message);
     } finally {
       setAnswering(false);
     }
   }
 
+  function handleDealNext() {
+    if (!pendingNext) return;
+    setSession(pendingNext);
+    setPendingNext(null);
+    setLastAnswer(null);
+    setLastPick(null);
+  }
+
   const fullBoard =
-    summary?.streets.find((s) => s.street === "river")?.cards ?? session?.board ?? [];
+    summary?.streets.find((s) => s.street === "river")?.cards ??
+    session?.board ??
+    [];
+
+  const nextStreetLabel = pendingNext?.street
+    ? `Pedir ${pendingNext.street.charAt(0).toUpperCase()}${pendingNext.street.slice(
+        1
+      )}`
+    : "Pedir carta";
 
   return (
     <div className="hand-container">
-      <h2>Texture Trainer</h2>
-      {!session && !summary && (
+      {error && <p className="error">{error}</p>}
+      {!session && (
         <div className="actions">
           <button
             type="button"
@@ -98,8 +126,6 @@ export function TextureTrainer() {
         </div>
       )}
 
-      {error && <p className="error">{error}</p>}
-
       {session && session.board.length > 0 && (
         <>
           <h3>
@@ -107,8 +133,18 @@ export function TextureTrainer() {
             <span style={{ textTransform: "capitalize" }}>{session.street}</span>
           </h3>
 
-          <div className="table-zone">
-            <PokerTable boardCards={session.board}  />
+          <div className="table-zone table-zone--controls">
+            <button
+              className="btn table-action"
+              onClick={handleNewSession}
+              disabled={loading}
+              type="button"
+              title="Nueva mano"
+            >
+              ↻ Nueva mano
+            </button>
+
+            <PokerTable boardCards={session.board} />
           </div>
 
           <p>¿Cómo describirías la textura de este board?</p>
@@ -120,7 +156,7 @@ export function TextureTrainer() {
                 type="button"
                 className="texture-btn"
                 onClick={() => handleTextureClick(tex)}
-                disabled={answering}
+                disabled={answering || !!lastAnswer}
               >
                 {TEXTURE_LABELS[tex]}
               </button>
@@ -128,15 +164,32 @@ export function TextureTrainer() {
           </div>
 
           {lastAnswer && (
-            <FeedbackPanel
-              verdict={lastAnswer.verdict}
-              primary={{ label: "Tu respuesta", value: lastPick ? TEXTURE_LABELS[lastPick] : "—", }}
-              secondary={{
-                label: "Correcta",
-                value: TEXTURE_LABELS[lastAnswer.correctTexture],
-              }}
-              explanation={lastAnswer.helpText}
-            />
+            <>
+              <FeedbackPanel
+                verdict={lastAnswer.verdict}
+                primary={{
+                  label: "Tu respuesta",
+                  value: lastPick ? TEXTURE_LABELS[lastPick] : "—",
+                }}
+                secondary={{
+                  label: "Correcta",
+                  value: TEXTURE_LABELS[lastAnswer.correctTexture],
+                }}
+                explanation={lastAnswer.helpText}
+              />
+
+              {pendingNext && (
+                <div className="actions">
+                  <button
+                    type="button"
+                    className="btn btn-primary btn-start"
+                    onClick={handleDealNext}
+                  >
+                    {nextStreetLabel}
+                  </button>
+                </div>
+              )}
+            </>
           )}
         </>
       )}
