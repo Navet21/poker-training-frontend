@@ -1,16 +1,11 @@
 import { useState } from "react";
-
 import type { OutsSession } from "../../domain/outs/outs.session";
-
-
 import {
   answerOutsTrainingSession,
   createOutsTrainingSession,
 } from "../../api/training/outsApi";
-
 import { PokerTable } from "../PokerTable/PokerTable";
 import { FeedbackPanel } from "../FeedbackPanel/FeedbackPanel";
-
 import "./OutsTrainer.css";
 import type { OutsAnswer } from "../../domain/outs/out.types";
 
@@ -20,7 +15,6 @@ export function OutsTrainer() {
   const [outsInput, setOutsInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-
 
   async function handleNewSession() {
     try {
@@ -59,7 +53,6 @@ export function OutsTrainer() {
     setError("");
     setLoading(true);
 
-    // ✅ LOG 2: payload exacto que sale al backend
     const payload = { street: session.street, outs };
 
     const res = await answerOutsTrainingSession(session.sessionId, payload);
@@ -99,12 +92,12 @@ export function OutsTrainer() {
     {!session && (
       <div className="actions">
         <button
-          className="btn btn-primary btn-wide"
+          className="btn btn-primary btn-start"
           onClick={handleNewSession}
           disabled={loading}
           type="button"
         >
-          {loading ? "Creando sesión..." : "Empezar sesión"}
+          {loading ? "Creando sesión..." : "Start"}
         </button>
       </div>
     )}

@@ -4,18 +4,13 @@ import {
   answerTrainingSession,
   getTrainingSessionSummary,
 } from "../../api/training/trainingApi";
-
 import type { TextureSession, TextureAnswer } from "../../domain/texture/texture.types";
 import type { BoardTexture } from "../../types";
-
-
 import { Card } from "../Card/Card";
 import { PokerTable } from "../PokerTable/PokerTable";
 import { FeedbackPanel } from '../FeedbackPanel/FeedbackPanel';
-
 import "./TextureTrainer.css";
 import type { TrainingSessionSummaryDto } from "../../api/contracts/texture.dto";
-
 const TEXTURE_LABELS: Record<BoardTexture, string> = {
   dry: "Seca",
   semi_coordinated: "Semi-coordinada",
@@ -89,18 +84,19 @@ export function TextureTrainer() {
 
   return (
     <div className="hand-container">
-      <h2>Trainer: Textura</h2>
-
-      <button
-        type="button"
-        className="btn btn-primary"
-        onClick={handleNewSession}
-        disabled={loading || !!session}
-      >
-        {loading ? "Creando sesión..." : "Nueva sesión"}
-      </button>
-
-
+      <h2>Texture Trainer</h2>
+      {!session && !summary && (
+        <div className="actions">
+          <button
+            type="button"
+            className="btn btn-primary btn-start"
+            onClick={handleNewSession}
+            disabled={loading}
+          >
+            {loading ? "Creating session..." : "Start"}
+          </button>
+        </div>
+      )}
 
       {error && <p className="error">{error}</p>}
 
@@ -121,6 +117,8 @@ export function TextureTrainer() {
             {(Object.keys(TEXTURE_LABELS) as BoardTexture[]).map((tex) => (
               <button
                 key={tex}
+                type="button"
+                className="texture-btn"
                 onClick={() => handleTextureClick(tex)}
                 disabled={answering}
               >
@@ -174,10 +172,6 @@ export function TextureTrainer() {
             ))}
           </div>
         </div>
-      )}
-
-      {!session && !summary && !loading && (
-        <p>Pulsa &quot;Nueva sesión&quot; para empezar a entrenar.</p>
       )}
     </div>
   );

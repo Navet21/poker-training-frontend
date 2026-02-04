@@ -1,4 +1,5 @@
 import "./TrainerLayout.css";
+import { SkinToggle } from "../SkinToggle/SkinToggle";
 
 type Props = {
   title: string;
@@ -12,12 +13,16 @@ export function TrainerLayout({ title, onBack, children }: Props) {
       <div className="trainer-top">
         <div>
           <h2 className="trainer-title">{title}</h2>
-          <p className="trainer-subtitle">Modo entrenamiento · feedback en cada decisión</p>
+          <p className="trainer-subtitle">
+            Modo entrenamiento · feedback en cada decisión
+          </p>
         </div>
-
-        <button className="trainer-back" onClick={onBack} type="button">
-          ← Volver
-        </button>
+        <div className="trainer-actions">
+          <SkinToggle variant="label" />
+          <button className="trainer-back" onClick={onBack} type="button">
+            ← Volver
+          </button>
+        </div>
       </div>
 
       <div className="trainer-body">{children}</div>

@@ -1,9 +1,68 @@
+/* TextureTrainer.css */
+
 .hand-container {
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
+/* Igual que OutsTrainer: centra el botón y evita que se estire */
+.actions {
+  display: flex;
+  justify-content: center;
+  margin: 14px 0 18px;
+}
+
+/* ====== Sesión (botones de textura) ====== */
+
+.texture-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
+  margin-bottom: 12px;
+}
+
+.texture-btn {
+  background: rgba(2, 6, 23, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: #e5e7eb;
+  padding: 10px 12px;
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: border-color 160ms ease, box-shadow 160ms ease, transform 120ms ease,
+    background 160ms ease;
+}
+
+.texture-btn:hover {
+  border-color: rgba(255, 255, 255, 0.28);
+  background: rgba(2, 6, 23, 0.5);
+  box-shadow: 0 0 0 3px rgba(148, 163, 184, 0.12);
+  transform: translateY(-1px);
+}
+
+.texture-btn:active {
+  transform: translateY(0px);
+}
+
+.texture-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Móvil: botones tipo “2 columnas” */
+@media (max-width: 520px) {
+  .texture-btn {
+    flex: 1 1 45%;
+    text-align: center;
+  }
+}
+
+/* ====== Resumen final ====== */
 
 .table-wrapper {
   display: flex;
@@ -11,6 +70,7 @@
   margin: 1.5rem 0;
 }
 
+/* Mesa del resumen */
 .poker-table {
   width: 540px;
   max-width: 100%;
@@ -24,27 +84,13 @@
   justify-content: center;
 }
 
-/* Cartas del board en HORIZONTAL */
+/* Cartas del board en horizontal */
 .community-row {
   display: flex;
-  flex-direction: row; /* 👈 importante para que no sean columna */
+  flex-direction: row;
   gap: 0.6rem;
 }
 
-/* Botones de textura */
-.texture-buttons {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  margin-bottom: 1rem;
-}
-
-/* Resultado */
-.answer-result {
-  margin-top: 1rem;
-}
-
-/* Resumen final */
 .streets-summary {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -64,9 +110,33 @@
   align-items: center;
 }
 
-.help-text {
-  margin-top: 0.5rem;
-  font-size: 0.9rem;
-  color: #e5e7eb;
-  max-width: 700px;
+.btn-start {
+  width: auto;
+  min-width: 220px;
+  padding: 12px 18px;
+  border-radius: 999px;
+  border: 1px solid rgba(34, 197, 94, 0.35);
+  transition: box-shadow 160ms ease, border-color 160ms ease,
+    transform 120ms ease;
+}
+
+.btn-start:hover {
+  border-color: rgba(34, 197, 94, 0.85);
+  box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.12),
+    0 0 18px rgba(34, 197, 94, 0.25);
+  transform: translateY(-1px);
+}
+
+.btn-start:focus-visible {
+  outline: none;
+  border-color: rgba(34, 197, 94, 0.9);
+  box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.18),
+    0 0 22px rgba(34, 197, 94, 0.28);
+}
+
+.btn-start:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }

@@ -61,3 +61,23 @@
   justify-content: center;
   margin: 8px 0 16px;
 }
+
+
+.trainer-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+@media (max-width: 520px) {
+  .trainer-actions .skin-toggle__label,
+  .trainer-actions .skin-toggle__value {
+    display: none;
+  }
+
+  .trainer-actions .skin-toggle {
+    padding: 8px 10px;
+    gap: 0;
+  }
+}
