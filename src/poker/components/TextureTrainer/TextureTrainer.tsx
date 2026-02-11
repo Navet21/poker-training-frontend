@@ -27,6 +27,10 @@ export function TextureTrainer() {
   const [answering, setAnswering] = useState(false);
   const [error, setError] = useState<string>("");
   const [pendingNext, setPendingNext] = useState<TextureSession | null>(null);
+  const [awaitingSummary, setAwaitingSummary] = useState(false);
+  const [showSummary, setShowSummary] = useState(false);
+  const [finishedSessionId, setFinishedSessionId] = useState<string | null>(null);
+  const [lastBoard, setLastBoard] = useState<TextureSession | null>(null);
 
   async function handleNewSession() {
     try {
@@ -35,6 +39,10 @@ export function TextureTrainer() {
       setLastAnswer(null);
       setLastPick(null);
       setPendingNext(null);
+      setAwaitingSummary(false);
+      setShowSummary(false);
+      setFinishedSessionId(null);
+      setLastBoard(null);
 
       setLoading(true);
       const data = await createTrainingSession();
@@ -66,12 +74,9 @@ export function TextureTrainer() {
       setLastAnswer(answer);
 
       if (answer.finished) {
-        const summaryData = await getTrainingSessionSummary(session.sessionId).catch(
-          () => null
-        );
-
-        if (summaryData) setSummary(summaryData);
-
+        setFinishedSessionId(session.sessionId);
+        setLastBoard({ sessionId: session.sessionId, street: session.street, board: session.board });
+        setAwaitingSummary(true);
         setSession(null);
         setPendingNext(null);
       } else if (answer.next) {
@@ -99,6 +104,25 @@ export function TextureTrainer() {
     setLastPick(null);
   }
 
+  async function handleRequestSummary() {
+    if (!finishedSessionId) return;
+    try {
+      setError("");
+      setLoading(true);
+      const summaryData = await getTrainingSessionSummary(finishedSessionId);
+      setSummary(summaryData);
+      setShowSummary(true);
+      setAwaitingSummary(false);
+    } catch (err) {
+      console.error(err);
+      const message =
+        err instanceof Error ? err.message : "Error al obtener el resumen";
+      setError(message);
+    } finally {
+      setLoading(false);
+    }
+  }
+
   const fullBoard =
     summary?.streets.find((s) => s.street === "river")?.cards ??
     session?.board ??
@@ -113,7 +137,8 @@ export function TextureTrainer() {
   return (
     <div className="hand-container">
       {error && <p className="error">{error}</p>}
-      {!session && (
+      
+      {!session && !summary && !awaitingSummary && (
         <div className="actions">
           <button
             type="button"
@@ -163,7 +188,7 @@ export function TextureTrainer() {
             ))}
           </div>
 
-          {lastAnswer && (
+          {lastAnswer && !summary && (
             <>
               <FeedbackPanel
                 verdict={lastAnswer.verdict}
@@ -194,7 +219,52 @@ export function TextureTrainer() {
         </>
       )}
 
-      {summary && (
+      {awaitingSummary && !summary && lastAnswer && lastBoard && (
+        <div style={{ marginTop: 20 }}>
+          <h3>
+            Street actual:{" "}
+            <span style={{ textTransform: "capitalize" }}>{lastBoard.street}</span>
+          </h3>
+
+          <div className="table-zone">
+            <PokerTable boardCards={lastBoard.board} />
+          </div>
+
+          <FeedbackPanel
+            verdict={lastAnswer.verdict}
+            primary={{
+              label: "Tu respuesta",
+              value: lastPick ? TEXTURE_LABELS[lastPick] : "—",
+            }}
+            secondary={{
+              label: "Correcta",
+              value: TEXTURE_LABELS[lastAnswer.correctTexture],
+            }}
+            explanation={lastAnswer.helpText}
+          />
+
+          <div className="actions" style={{ marginTop: 20 }}>
+            <button
+              type="button"
+              className="btn btn-primary btn-start"
+              onClick={handleRequestSummary}
+              disabled={loading}
+            >
+              {loading ? "Cargando resumen..." : "Ver resumen de la sesión"}
+            </button>
+            <button
+              type="button"
+              className="btn btn-start"
+              onClick={handleNewSession}
+              disabled={loading}
+            >
+              Nueva sesión
+            </button>
+          </div>
+        </div>
+      )}
+
+      {summary && showSummary && (
         <div style={{ marginTop: 20 }}>
           <h3>Resumen de la sesión</h3>
 
@@ -223,6 +293,17 @@ export function TextureTrainer() {
                 </p>
               </div>
             ))}
+          </div>
+
+          <div className="actions" style={{ marginTop: 20 }}>
+            <button
+              type="button"
+              className="btn btn-primary btn-start"
+              onClick={handleNewSession}
+              disabled={loading}
+            >
+              Nueva sesión
+            </button>
           </div>
         </div>
       )}

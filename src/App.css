@@ -3,7 +3,7 @@ body {
   margin: 0;
   padding: 0;
   min-height: 100%;
-  background: #020617;
+  background: #1e293b;
 }
 
 .app {
@@ -12,7 +12,7 @@ body {
   flex-direction: column;
   font-family: "Inter", system-ui, sans-serif;
   color: #f9fafb;
-  background: radial-gradient(circle at top, #0f172a, #020617 60%, #000);
+  background: linear-gradient(135deg, #334155 0%, #1e293b 50%, #0f172a 100%);
 }
 
 
@@ -50,8 +50,8 @@ body {
 .tab {
   padding: 8px 14px;
   border-radius: 999px;
-  background: #020617;
-  border: 1px solid #1e293b;
+  background: #0f172a;
+  border: 1px solid #334155;
   color: #e5e7eb;
   font-weight: 700;
   cursor: pointer;

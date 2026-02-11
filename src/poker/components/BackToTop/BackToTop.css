@@ -1,0 +1,35 @@
+.back-to-top {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  .back-to-top {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    bottom: 24px;
+    right: 20px;
+    width: 44px;
+    height: 44px;
+    background: #0f172a;
+    border: 2px solid #22c55e;
+    border-radius: 999px;
+    color: #22c55e;
+    font-size: 20px;
+    font-weight: 800;
+    cursor: pointer;
+    z-index: 900;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    transition: opacity 0.2s, transform 0.15s ease;
+  }
+
+  .back-to-top:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
+  }
+
+  .back-to-top:active {
+    transform: translateY(0);
+  }
+}

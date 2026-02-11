@@ -1,7 +1,7 @@
 import "./Home.css";
 
 type Props = {
-  onSelect: (mode: "texture" | "outs") => void;
+  onSelect: (mode: "texture" | "outs" | "glossary") => void;
 };
 
 export function Home({ onSelect }: Props) {
@@ -34,6 +34,16 @@ export function Home({ onSelect }: Props) {
           <span className="home-card-title">🎯 Cálculo de outs</span>
           <span className="home-card-desc">
             Entrena outs ajustadas según textura, bloqueadores y backdoors.
+          </span>
+        </button>
+
+        <button
+          className="home-card"
+          onClick={() => onSelect("glossary")}
+        >
+          <span className="home-card-title">📚 Glosario</span>
+          <span className="home-card-desc">
+            Términos y conceptos básicos para principiantes.
           </span>
         </button>
 
