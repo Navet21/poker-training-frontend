@@ -7,8 +7,10 @@
 
 .actions {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   margin: 14px 0 18px;
+  gap: 12px;
 }
 .texture-buttons {
   display: flex;
@@ -53,6 +55,16 @@
   .texture-btn {
     flex: 1 1 45%;
     text-align: center;
+  }
+
+  .actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .actions .btn-start {
+    min-width: 0;
+    width: 100%;
   }
 }
 
