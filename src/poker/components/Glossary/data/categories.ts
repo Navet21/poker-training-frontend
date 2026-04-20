@@ -1,4 +1,5 @@
-import type { GlossaryCategory } from "../../../types";
+import type { GlossaryCategory } from "./glossary.types";
+
 
 
 
