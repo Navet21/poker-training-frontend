@@ -33,13 +33,19 @@
 }
 
 .trainer-back {
-  background: transparent;
-  border: 1px solid #1e293b;
-  color: #e5e7eb;
+  background: #0f172a;
+  border: 1px solid #475569;
+  color: #f1f5f9;
   padding: 10px 14px;
   border-radius: 999px;
   font-weight: 700;
   cursor: pointer;
+  transition: all 0.2s;
+}
+
+.trainer-back:hover {
+  background: #1e293b;
+  border-color: #64748b;
 }
 
 .trainer-body {

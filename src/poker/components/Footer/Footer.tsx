@@ -15,17 +15,17 @@ export function Footer() {
             Contacto
           </a>
           <span className="separator">|</span>
-          <a 
-            href="https://github.com/navet21" 
-            target="_blank" 
+          <a
+            href="https://github.com/navet21"
+            target="_blank"
             rel="noopener noreferrer"
           >
             GitHub
           </a>
           <span className="separator">|</span>
-          <a 
-            href="https://linkedin.com/in/navet21" 
-            target="_blank" 
+          <a
+            href="https://linkedin.com/in/navet21"
+            target="_blank"
             rel="noopener noreferrer"
           >
             LinkedIn
